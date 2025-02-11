@@ -13,7 +13,7 @@ const App = () => {
         setLoading(true);
         try {
             // Enviar la solicitud con el texto del usuario y el historial de la conversación
-            const response = await axios.post("https://aivo-backend-production.up.railway.app/api/analyze", {
+            const response = await axios.post("http://localhost:5000/api/analyze", {
                 text: userInput,
                 conversation, // Enviamos el historial completo
             });
@@ -38,36 +38,36 @@ const App = () => {
     };
 
     return (
-      <div className="container">
-          <h1>📝 Reporte de Incidentes</h1>
-  
-          {/* Ventana de chat */}
-          <div className="chat-window">
-              {conversation.map((entry, index) => (
-                  <div key={index} className={`entry ${entry.role}`}>
-                      <h3>{entry.role === "user" ? "Tú" : "IA"}</h3>
-                      <pre>
-                          {typeof entry.content === "string"
-                              ? entry.content
-                              : JSON.stringify(entry.content, null, 2)}
-                      </pre>
-                  </div>
-              ))}
-          </div>
-  
-          {/* Área de input */}
-          <div className="input-area">
-              <textarea
-                  placeholder="Describe la situación aquí..."
-                  value={userInput}
-                  onChange={(e) => setUserInput(e.target.value)}
-              />
-              <button onClick={handleSubmit} disabled={loading}>
-                  {loading ? "Procesando..." : "Enviar"}
-              </button>
-          </div>
-      </div>
-  );
+        <div className="container">
+            <h1>📝 Reporte de Incidentes</h1>
+
+            {/* Ventana de chat */}
+            <div className="chat-window">
+                {conversation.map((entry, index) => (
+                    <div key={index} className={`entry ${entry.role}`}>
+                        <h3>{entry.role === "user" ? "Tú" : "IA"}</h3>
+                        <pre>
+                            {typeof entry.content === "string"
+                                ? entry.content
+                                : JSON.stringify(entry.content, null, 2)}
+                        </pre>
+                    </div>
+                ))}
+            </div>
+
+            {/* Área de input */}
+            <div className="input-area">
+                <textarea
+                    placeholder="Describe la situación aquí..."
+                    value={userInput}
+                    onChange={(e) => setUserInput(e.target.value)}
+                />
+                <button onClick={handleSubmit} disabled={loading}>
+                    {loading ? "Procesando..." : "Enviar"}
+                </button>
+            </div>
+        </div>
+    );
 };
 
 export default App;
