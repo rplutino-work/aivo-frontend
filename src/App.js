@@ -4,7 +4,7 @@ import "./App.css";
 
 const App = () => {
     const [userInput, setUserInput] = useState("");
-    const [conversation, setConversation] = useState([]); // Historial de la conversación
+    const [conversation, setConversation] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async () => {
@@ -12,20 +12,20 @@ const App = () => {
 
         setLoading(true);
         try {
-            // Enviar la solicitud con el texto del usuario y el historial de la conversación
-            const response = await axios.post("http://localhost:5000/api/analyze", {
+
+            const response = await axios.post("https://aivo-backend-production.up.railway.app/api/analyze", {
                 text: userInput,
-                conversation, // Enviamos el historial completo
+                conversation, 
             });
 
-            // Actualizar el historial de la conversación
+
             setConversation((prev) => [
                 ...prev,
                 { role: "user", content: userInput },
                 { role: "ai", content: response.data },
             ]);
 
-            setUserInput(""); // Limpiar el input después de enviar
+            setUserInput("");
         } catch (error) {
             console.error("❌ Error en el frontend:", error);
             setConversation((prev) => [
