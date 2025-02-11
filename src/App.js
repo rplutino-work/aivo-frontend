@@ -21,7 +21,7 @@ const App = () => {
 
         setLoading(true);
         try {
-            const response = await axios.post("http://localhost:5000/api/analyze", {
+            const response = await axios.post("https://aivo-backend-production.up.railway.app/api/analyze", {
                 text: userInput,
                 conversation, 
             });
