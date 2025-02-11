@@ -4,7 +4,16 @@ import "./App.css";
 
 const App = () => {
     const [userInput, setUserInput] = useState("");
-    const [conversation, setConversation] = useState([]);
+    const [conversation, setConversation] = useState([]); // Historial de la conversación
+    const [jsonState, setJsonState] = useState({
+        date: "",
+        location: "",
+        description: "",
+        injuries: false,
+        owner: false,
+        complete: false,
+        question: ""
+    });
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async () => {
@@ -12,20 +21,27 @@ const App = () => {
 
         setLoading(true);
         try {
-
-            const response = await axios.post("https://aivo-backend-production.up.railway.app/api/analyze", {
+            const response = await axios.post("http://localhost:5000/api/analyze", {
                 text: userInput,
                 conversation, 
             });
 
+            const aiResponse = response.data;
 
+            // Actualizar el estado del JSON con la respuesta de la IA
+            setJsonState(prevState => ({
+                ...prevState,
+                ...aiResponse
+            }));
+
+            // Actualizar el historial de la conversación
             setConversation((prev) => [
                 ...prev,
                 { role: "user", content: userInput },
-                { role: "ai", content: response.data },
+                { role: "ai", content: aiResponse },
             ]);
 
-            setUserInput("");
+            setUserInput(""); // Limpiar el input después de enviar
         } catch (error) {
             console.error("❌ Error en el frontend:", error);
             setConversation((prev) => [
@@ -66,6 +82,12 @@ const App = () => {
                     {loading ? "Procesando..." : "Enviar"}
                 </button>
             </div>
+
+            {/* Mostrar el estado actual del JSON */}
+            <div className="json-state">
+              <h3>Estado actual del JSON:</h3>
+              <pre>{JSON.stringify(jsonState, null, 2)}</pre>
+          </div>
         </div>
     );
 };
